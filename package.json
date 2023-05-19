@@ -1,0 +1,19 @@
+{
+  "name": "vid-qa",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node -T src/main.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^20.1.7",
+    "dotenv": "^16.0.3",
+    "fuzzball": "^2.1.2",
+    "node-mpv": "^2.0.0-beta.2",
+    "openai": "^3.2.1"
+  }
+}
