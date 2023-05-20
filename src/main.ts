@@ -1,5 +1,9 @@
 import { ChatCompletionRequestMessage } from "openai";
-import { getHumanTextInput, getHumanVoiceInput } from "./getHumanInput";
+import {
+  confirmContinue,
+  getHumanTextInput,
+  getHumanVoiceInput,
+} from "./getHumanInput";
 import { chat } from "./openai";
 import { answerQsPrompt, createUserQuestionMessage } from "./prompt";
 import { Word } from "./types";
@@ -71,7 +75,11 @@ async function main() {
     }
     const curTime = await mpv.getCurrentTimestamp();
     console.log("Question:", question);
-    console.log("Start:", curTime);
+
+    if (!confirmContinue()) {
+      continue;
+    }
+
     if (!question || !curTime) return;
 
     const startTime = Math.max(curTime - 60, 0);
@@ -160,9 +168,12 @@ async function main() {
 
     if (!error && validatedParts.length > 0) {
       const answerText = validatedParts.map((x) => x.text).join(" ");
-      console.log(validatedParts);
       console.log("Answer:", answerText);
-      console.log(all_words);
+
+      if (!confirmContinue()) {
+        continue;
+      }
+
       const audioSections: AudioSection[] = validatedParts.map((part) => {
         const startWordIdx = convertCharacterIdxToWordIdx(
           part.startCharacterIdx
