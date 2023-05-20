@@ -76,7 +76,7 @@ async function main() {
     const curTime = await mpv.getCurrentTimestamp();
     console.log("Question:", question);
 
-    if (!confirmContinue()) {
+    if (!(await confirmContinue())) {
       continue;
     }
 
@@ -167,10 +167,12 @@ async function main() {
     }
 
     if (!error && validatedParts.length > 0) {
+      console.log("Validated parts:", validatedParts);
+      console.log("All words", JSON.stringify(all_words));
       const answerText = validatedParts.map((x) => x.text).join(" ");
       console.log("Answer:", answerText);
 
-      if (!confirmContinue()) {
+      if (!(await confirmContinue())) {
         continue;
       }
 
@@ -179,11 +181,14 @@ async function main() {
           part.startCharacterIdx
         );
 
-        const startTimeInExtractedAudio =
-          all_words[startWordIdx].start - startTime;
+        const startTimeInExtractedAudio = all_words[startWordIdx].start;
         const endTimeInExtractedAudio =
-          all_words[startWordIdx + part.text.split(" ").length - 1].end -
-          startTime;
+          all_words[startWordIdx + part.text.split(" ").length - 1].end;
+
+        if (startTimeInExtractedAudio < 0 || endTimeInExtractedAudio < 0) {
+          throw new Error("Negative time");
+        }
+
         return {
           startTimeInExtractedAudio,
           endTimeInExtractedAudio,
