@@ -98,7 +98,7 @@ async function main() {
       return all_words.filter((word) => word.start >= start && word.end <= end);
     };
 
-    const text = get_words_in_range(startTime, endTime)
+    const text = get_words_in_range(0, endTime - startTime)
       .map((x) => x.text)
       .join(" ")
       .toLowerCase()
