@@ -132,9 +132,13 @@ async function main() {
       let charIdx = 0;
       for (let i = 0; i < all_words.length; i++) {
         const word = all_words[i];
-        if (charIdx === characterIdx) return i;
-        charIdx += word.text.length + 1;
+        for (let j = 0; j < word.text.length; j++) {
+          if (charIdx === characterIdx) return i;
+          charIdx += 1;
+        }
       }
+
+      console.log("ERROR: Failed to convert character idx to word idx");
       return -1;
     }
 
